@@ -1,3 +1,3 @@
 #!/usr/bin/bash
 
-docker build -t myapp . && docker run -it --name mycontainer myapp
+docker build -t llm . && docker run -it --name llama-3.1-70B-Japanese-Instruct-2407-gguf llm
