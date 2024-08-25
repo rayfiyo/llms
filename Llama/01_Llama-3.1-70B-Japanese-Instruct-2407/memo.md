@@ -9,7 +9,8 @@ RUN     apt update -y &&\
         source bin/activate &&\
         pip install torch transformers llama-cpp-python &&\
         CMAKE_ARGS="-DLLAMA_CUBLAS=on -DLLAVA_BUILD=off" pip install llama-cpp-python &&\
-        CMAKE_ARGS="-DGGML_CUDA=on -DLLAVA_BUILD=off" pip install llama-cpp-python --upgrade &&\
+        CMAKE_ARGS="-DGGML_CUDA=on -DLLAVA_BUILD=off" pip install llama-cpp-python --upgrade
+COPY ./query4llama-cpp.py "/llama3.1/"
 ```
 
 ```
