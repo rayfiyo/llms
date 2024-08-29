@@ -28,7 +28,7 @@ func (c *Client) Chat(req *models.ChatRequest) ([]models.Response, error) {
 		return nil, fmt.Errorf("error marshaling request: %w", err)
 	}
 
-	resp, err := c.HTTPClient.Post(c.BaseURL+"/api/chat", "application/json", bytes.NewBuffer(data))
+	resp, err := c.HTTPClient.Post(c.BaseURL, "application/json", bytes.NewBuffer(data))
 	if err != nil {
 		return nil, fmt.Errorf("error making request: %w", err)
 	}
@@ -38,14 +38,14 @@ func (c *Client) Chat(req *models.ChatRequest) ([]models.Response, error) {
 		return nil, fmt.Errorf("unexpected status code: %d", resp.StatusCode)
 	}
 
-	var responses []models.ChatResponse
+	var responses []models.Response
 	scanner := bufio.NewScanner(resp.Body)
 	for scanner.Scan() {
-		var chatResp models.ChatResponse
-		if err := json.Unmarshal(scanner.Bytes(), &chatResp); err != nil {
+		var resp models.Response
+		if err := json.Unmarshal(scanner.Bytes(), &resp); err != nil {
 			return nil, fmt.Errorf("error unmarshaling response: %w", err)
 		}
-		responses = append(responses, chatResp)
+		responses = append(responses, resp)
 	}
 
 	if err := scanner.Err(); err != nil {
