@@ -55,8 +55,11 @@ func main() {
 		}
 
 		// 出力系
+		if err := files.Append(fileName, "## "+fmt.Sprint(i)); err != nil {
+			log.Fatalf("Error appending to file 1@%d: %v", i, err)
+		}
 		if err := files.Append(fileName, content); err != nil {
-			log.Fatalf("Error appending to file: %v", err)
+			log.Fatalf("Error appending to file 2@%d: %v", i, err)
 		}
 		fmt.Println("- - - - - - - - - - - -")
 		fmt.Printf("%3d:\n%s\n", i, content)
