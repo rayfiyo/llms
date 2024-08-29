@@ -17,7 +17,7 @@ func main() {
 	model := flag.String(
 		"model", "Llama-3-Swallow-70B-Instruct-v0.1-Q8_0",
 		"Model name.")
-	cyclesLimit := flag.Int("limit", 12, "Limit number of sends cycles.")
+	cyclesLimit := flag.Int("limit", 6, "Limit number of sends cycles.")
 	head := flag.String("head", "", "Prompt head . Fixed statement.")
 	flag.Parse()
 	prompt := flag.Arg(0)
