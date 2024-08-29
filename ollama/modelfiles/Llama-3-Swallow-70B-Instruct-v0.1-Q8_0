@@ -11,3 +11,4 @@ PARAMETER num_keep 24
 PARAMETER stop <|start_header_id|>
 PARAMETER stop <|end_header_id|>
 PARAMETER stop <|eot_id|>
+SYSTEM 指示がない限り必ず日本語を用いて出力してください．日本語でない出力をした場合ペナルティが課せられます．
