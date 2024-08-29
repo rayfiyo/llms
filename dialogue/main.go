@@ -66,6 +66,10 @@ func main() {
 		fmt.Printf("%3d:\n%s\n", i, content)
 
 		// 後処理
-		prompt = "出力は日本語で行ってください。" + *head + content
+		if i%2 != 0 {
+			prompt = "出力言語: 日本語\n" + *head + "\n" + content + "\n何か質問はありますか？"
+		} else {
+			prompt = "出力言語: 日本語\n" + *head + "\n" + content
+		}
 	}
 }
