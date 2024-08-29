@@ -20,28 +20,32 @@ func main() {
 	var content string
 	var err error
 
-	switch *mode {
-	case "chat":
-		request := &models.ChatRequest{
-			Model: *model,
-			Messages: []models.Message{
-				{Role: "user", Content: prompt},
-			},
+	for i := 1; i < 10; i++ {
+		switch *mode {
+		case "chat":
+			request := &models.ChatRequest{
+				Model: *model,
+				Messages: []models.Message{
+					{Role: "user", Content: prompt},
+				},
+			}
+			content, err = client.Chat(request)
+		case "generate":
+			request := &models.GenerateRequest{
+				Model:  *model,
+				Prompt: prompt,
+			}
+			content, err = client.Generate(request)
+		default:
+			log.Fatalf("Invalid mode: %s. Use 'chat' or 'generate'", *mode)
 		}
-		content, err = client.Chat(request)
-	case "generate":
-		request := &models.GenerateRequest{
-			Model:  *model,
-			Prompt: prompt,
+
+		if err != nil {
+			log.Fatalf("Error@%d: %v", i, err)
 		}
-		content, err = client.Generate(request)
-	default:
-		log.Fatalf("Invalid mode: %s. Use 'chat' or 'generate'", *mode)
-	}
 
-	if err != nil {
-		log.Fatalf("Error: %v", err)
+		fmt.Printf("- - - - - - - - - - - -")
+		fmt.Printf("%3d: %s\n", i, content)
+		prompt = content
 	}
-
-	fmt.Println(content)
 }
