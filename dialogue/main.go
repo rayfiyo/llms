@@ -13,11 +13,12 @@ import (
 
 func main() {
 	mode := flag.String(
-		"mode", "generate", "Mode to use: 'chat' or 'generate'")
+		"mode", "generate", "Mode to use: 'chat' or 'generate'.")
 	model := flag.String(
 		"model", "Llama-3-Swallow-70B-Instruct-v0.1-Q8_0",
-		"model name flag")
-	cyclesLimit := flag.Int("limit", 12, "Limit number of sends cycles")
+		"Model name.")
+	cyclesLimit := flag.Int("limit", 12, "Limit number of sends cycles.")
+	head := flag.String("head", "", "Prompt head . Fixed statement.")
 	flag.Parse()
 	prompt := flag.Arg(0)
 
@@ -65,6 +66,6 @@ func main() {
 		fmt.Printf("%3d:\n%s\n", i, content)
 
 		// 後処理
-		prompt = "出力は日本語で行ってください。" + content
+		prompt = "出力は日本語で行ってください。" + *head + content
 	}
 }
