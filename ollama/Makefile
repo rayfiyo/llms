@@ -8,7 +8,7 @@ start:
 	@make --no-print-directory run
 
 build:
-	docker build -t $(IMAGE_NAME) .
+	docker build . --quiet -t $(IMAGE_NAME)
 
 run:
 	docker run -p 11434:11434 --name $(CONTAINER_NAME) $(IMAGE_NAME)
