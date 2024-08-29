@@ -17,6 +17,7 @@ docker run -d -p 8080:8080 --add-host=host.docker.internal:host-gateway -v open-
 
 - .gguf をダウンロードする
 - モデルファイルを作成する（参考: modelfiles/）
+- Makefile の変数を必要に応じて編集する
 
 # Links
 

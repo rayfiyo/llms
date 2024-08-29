@@ -13,7 +13,7 @@ run:
 	docker run -d -p 11434:11434 --name $(CONTAINER) $(IMAGE)
 
 exec:
-	docker exec -it ollama-container ollama run $(MODEL)
+	docker exec -it ollama-container ollama create $(MODEL) -f $(MODEL) && ollama run $(MODEL)
 
 start:
 	@make --no-print-directory run
