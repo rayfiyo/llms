@@ -11,7 +11,7 @@ build:
 	docker build . --quiet -t $(IMAGE_NAME)
 
 run:
-	docker run -p 11434:11434 --name $(CONTAINER_NAME) $(IMAGE_NAME)
+	docker run -d -p 11434:11434 --name $(CONTAINER_NAME) $(IMAGE_NAME)
 
 clean-all:
 	@make --no-print-directory clean
