@@ -22,7 +22,12 @@ type ChatRequest struct {
 	Messages []Message `json:"messages"`
 }
 
-type ChatResponse struct {
+type GenerateRequest struct {
+	Model  string `json:"model"`
+	Prompt string `json:"prompt"`
+}
+
+type Response struct {
 	Model     string  `json:"model"`
 	CreatedAt string  `json:"created_at"`
 	Message   Message `json:"message"`
@@ -36,17 +41,7 @@ func NewAPIClient(baseURL string) *APIClient {
 	}
 }
 
-func (c *APIClient) Chat(model string, messages []Message) ([]Message, error) {
-	requestBody := ChatRequest{
-		Model:    model,
-		Messages: messages,
-	}
-
-	jsonBody, err := json.Marshal(requestBody)
-	if err != nil {
-		return nil, err
-	}
-
+func (c *APIClient) Chat(jsonBody []byte) ([]Message, error) {
 	req, err := http.NewRequest("POST", c.BaseURL, bytes.NewBuffer(jsonBody))
 	if err != nil {
 		return nil, err
@@ -63,7 +58,7 @@ func (c *APIClient) Chat(model string, messages []Message) ([]Message, error) {
 	var responses []Message
 	decoder := json.NewDecoder(resp.Body)
 	for {
-		var chatResp ChatResponse
+		var chatResp Response
 		if err := decoder.Decode(&chatResp); err == io.EOF {
 			break
 		} else if err != nil {
