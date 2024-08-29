@@ -1,4 +1,4 @@
-.PHONY: build run exec start	clean rmi clean-all
+.PHONY: build run exec init start	stop clean rmi clean-all
 
 CONTAINER = ollama-container
 IMAGE = ollama-image
@@ -14,6 +14,11 @@ run:
 
 exec:
 	docker exec -it ollama-container ollama create $(MODEL) -f $(MODEL) && ollama run $(MODEL)
+
+init:
+	@make --no-print-directory build
+	@make --no-print-directory run
+	@make --no-print-directory exec
 
 start:
 	@make --no-print-directory run

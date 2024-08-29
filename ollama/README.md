@@ -1,7 +1,7 @@
 # note
 
 ```bash
-# make build
+# make init
 
 make start
 
