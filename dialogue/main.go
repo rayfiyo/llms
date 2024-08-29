@@ -45,7 +45,7 @@ func main() {
 		}
 
 		fmt.Printf("- - - - - - - - - - - -")
-		fmt.Printf("%3d: %s\n", i, content)
+		fmt.Printf("%3d:\n%s\n", i, content)
 		prompt = content
 	}
 }
