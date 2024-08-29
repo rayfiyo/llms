@@ -1,28 +1,35 @@
-.PHONY: build run start		clean rmi clean-all
+.PHONY: build run exec start	clean rmi clean-all
 
-CONTAINER_NAME = ollama-container
-IMAGE_NAME = ollama-image
+CONTAINER = ollama-container
+IMAGE = ollama-image
+MODEL = llama3:70b
 
 #
 
 build:
-	docker build -t $(IMAGE_NAME) --quiet .
+	docker build -t $(IMAGE) --quiet .
 
 run:
-	docker run -d -p 11434:11434 --name $(CONTAINER_NAME) $(IMAGE_NAME)
+	docker run -d -p 11434:11434 --name $(CONTAINER) $(IMAGE)
+
+exec:
+	docker exec -it ollama-container ollama run $(MODEL)
 
 start:
-	@make --no-print-directory build
 	@make --no-print-directory run
+	@make --no-print-directory exec
 
 #
 
+stop:
+	docker stop $(CONTAINER)
+
 clean:
-	docker stop $(CONTAINER_NAME)
-	docker rm $(CONTAINER_NAME)
+	@make --no-print-directory stop
+	docker rm $(CONTAINER)
 
 rmi:
-	docker rmi $(IMAGE_NAME)
+	docker rmi $(IMAGE)
 
 clean-all:
 	@make --no-print-directory clean

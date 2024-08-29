@@ -1,20 +1,13 @@
 # note
 
-## no use make
-
 ```bash
-docker build . --quiet -t ollama && docker run -d -p 11434:11434 -
--name ollama ollama
-docker exec -it ollama-container ollama run モデル
+# make build
 
-docker stop ollama && docker rm ollama
-```
-
-## use make
-
-```bash
 make start
-docker exec -it ollama-container ollama run モデル
+
+make stop
+
+# make clean
 
 # Open WebUIのセットアップ
 docker run -d -p 8080:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
