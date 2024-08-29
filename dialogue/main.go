@@ -44,8 +44,8 @@ func main() {
 			log.Fatalf("Error@%d: %v", i, err)
 		}
 
-		fmt.Printf("- - - - - - - - - - - -")
+		fmt.Println("- - - - - - - - - - - -")
 		fmt.Printf("%3d:\n%s\n", i, content)
-		prompt = content
+		prompt = "返答は日本語で行ってください。" + content
 	}
 }
