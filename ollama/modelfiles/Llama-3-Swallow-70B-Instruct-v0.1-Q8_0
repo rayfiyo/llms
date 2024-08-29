@@ -1,4 +1,4 @@
-FROM ../models/Llama-3-Swallow-70B-Instruct-v0.1-Q8_0.gguf
+FROM ./Llama-3-Swallow-70B-Instruct-v0.1-Q8_0.gguf
 
 TEMPLATE "{{ if .System }}<|start_header_id|>system<|end_header_id|>
 
