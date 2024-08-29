@@ -1,21 +1,21 @@
-.PHONY: start build run clean-all clean rmi
+.PHONY: build run start		clean rmi clean-all
 
 CONTAINER_NAME = ollama-container
 IMAGE_NAME = ollama-image
+
+#
+
+build:
+	docker build -t $(IMAGE_NAME) --quiet .
+
+run:
+	docker run -d -p 11434:11434 --name $(CONTAINER_NAME) $(IMAGE_NAME)
 
 start:
 	@make --no-print-directory build
 	@make --no-print-directory run
 
-build:
-	docker build . --quiet -t $(IMAGE_NAME)
-
-run:
-	docker run -d -p 11434:11434 --name $(CONTAINER_NAME) $(IMAGE_NAME)
-
-clean-all:
-	@make --no-print-directory clean
-	@make --no-print-directory rmi
+#
 
 clean:
 	docker stop $(CONTAINER_NAME)
@@ -23,3 +23,7 @@ clean:
 
 rmi:
 	docker rmi $(IMAGE_NAME)
+
+clean-all:
+	@make --no-print-directory clean
+	@make --no-print-directory rmi
