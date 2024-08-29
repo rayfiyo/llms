@@ -2,7 +2,7 @@
 
 CONTAINER = ollama-container
 IMAGE = ollama-image
-MODEL = llama3:70b
+MODEL = Llama-3-Swallow-70B-Instruct-v0.1-Q8_0
 
 #
 
