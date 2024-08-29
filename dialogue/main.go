@@ -1,12 +1,12 @@
 package main
 
 import (
-	"encoding/json"
 	"flag"
 	"fmt"
 	"log"
 
 	"github.com/rayfiyo/llms/dialogue/api"
+	"github.com/rayfiyo/llms/dialogue/models"
 )
 
 func main() {
@@ -19,7 +19,7 @@ func main() {
 	flag.Parse()
 	prompt := flag.Arg(0)
 
-	client := api.NewAPIClient(*url)
+	client := api.NewClient(*url)
 
 	/*
 		requestBody := GenerateRequest{
@@ -28,27 +28,22 @@ func main() {
 		}
 	*/
 
-	requestBody := api.ChatRequest{
+	request := &models.ChatRequest{
 		Model: *model,
-		Messages: []api.Message{
+		Messages: []models.Message{
 			{Role: "user", Content: prompt},
 		},
 	}
 
-	jsonBody, err := json.Marshal(requestBody)
+	responses, err := client.Chat(request)
 	if err != nil {
-		log.Fatal(err, 0)
-	}
-
-	responses, err := client.Chat(jsonBody)
-	if err != nil {
-		log.Fatal(err, 0)
+		log.Fatalf("Error during chat: %v %d", err, 0)
 	}
 
 	var answer string
-	for _, response := range responses {
-		answer += response.Content
-		fmt.Println(response.Content)
+	for _, resp := range responses {
+		fmt.Print(resp.Message.Content)
+		answer += resp.Message.Content
 	}
 
 	fmt.Println(answer)
