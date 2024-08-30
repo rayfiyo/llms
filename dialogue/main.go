@@ -63,9 +63,10 @@ func main() {
 			}
 		}
 		if *init != "" {
-			i = 0
 			prompt = language + "\n" + *head + "\n" +
 				*init + "\n" + *tail
+			i = 0
+			*init = ""
 		}
 
 		switch *mode {
