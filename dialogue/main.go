@@ -47,21 +47,25 @@ func main() {
 
 	for i := 1; i < *cyclesLimit+1; i++ {
 		// 整形
-		if *init != "" {
-			i = 0
-			prompt = language + "\n" + *head + "\n" + *init + "\n" + *tail
-		} else if i%2 != 0 {
+		if i%2 != 0 {
 			// 1 odd
-			prompt = language + "\n" + *head + "\n" + *head1 + "\n" + prompt + "\n" + *tail + "\n" + *tail1
+			prompt = language + "\n" + *head + "\n" + *head1 + "\n" +
+				prompt + "\n" + *tail + "\n" + *tail1
 			if *model1 != "" {
 				model = model1
 			}
 		} else {
 			// 2 even
-			prompt = language + "\n" + *head + "\n" + *head2 + "\n" + prompt + "\n" + *tail + "\n" + *tail2
+			prompt = language + "\n" + *head + "\n" + *head2 + "\n" +
+				prompt + "\n" + *tail + "\n" + *tail2
 			if *model2 != "" {
 				model = model2
 			}
+		}
+		if *init != "" {
+			i = 0
+			prompt = language + "\n" + *head + "\n" +
+				*init + "\n" + *tail
 		}
 
 		switch *mode {
