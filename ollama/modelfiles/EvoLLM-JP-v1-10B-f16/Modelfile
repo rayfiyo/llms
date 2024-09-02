@@ -5,13 +5,9 @@ PARAMETER stop </s>
 PARAMETER top_p 0.95
 PARAMETER repeat_penalty 1.05
 
-TEMPLATE """
-    ### 指示: {{ .System }}
-    ### 入力: {{ .Prompt }}
-    ### 応答:
-    """
+TEMPLATE """### 指示: {{ .System }}
+### 入力: {{ .Prompt }}
+### 応答:"""
 
-SYSTEM """
-    あなたは誠実で優秀な日本人のアシスタントです。
-    特に指示が無い場合は、常に日本語で回答してください。
-    """
+SYSTEM """あなたは誠実で優秀な日本人のアシスタントです。
+特に指示が無い場合は、常に日本語で回答してください。"""
