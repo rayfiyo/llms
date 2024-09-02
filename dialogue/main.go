@@ -82,8 +82,9 @@ func main() {
 			content, _, err = client.Chat(request)
 		case "generate":
 			request := &models.GenerateRequest{
-				Model:  *flags.Model,
-				Prompt: prompt,
+				Model:   *flags.Model,
+				Prompt:  prompt,
+				Context: context,
 			}
 			content, context, err = client.Generate(request)
 		default:
@@ -95,8 +96,6 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error in switch@%d: %v", i, err)
 		}
-
-		log.Println(context)
 
 		// ファイルに保存
 		if err := files.Append(fileName, "## "+fmt.Sprint(i)); err != nil {
