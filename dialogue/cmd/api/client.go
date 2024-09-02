@@ -5,6 +5,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"io"
 	"net/http"
 	"strings"
 
@@ -44,10 +45,17 @@ func (c *Client) sendRequest(endpoint string, req interface{}, mode string) (str
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode != http.StatusOK {
-		return "", nil, fmt.Errorf("unexpected status code: %d\n%s",
-			resp.StatusCode, string(bufio.NewScanner(resp.Body).Bytes()),
-		)
+	if resp.StatusCode < http.StatusOK || resp.StatusCode > http.StatusIMUsed {
+		bodyBytes, err := io.ReadAll(resp.Body)
+		if err != nil {
+			return "", nil, fmt.Errorf(
+				"error reading error response body: %w\n"+
+					"and unexpected status code: %d",
+				err, resp.StatusCode)
+		}
+		return "", nil, fmt.Errorf(
+			"unexpected status code: %d\nResponse: %s",
+			resp.StatusCode, string(bodyBytes))
 	}
 
 	var content strings.Builder

@@ -7,6 +7,7 @@ import (
 
 	"github.com/rayfiyo/llms/dialogue/cmd/api"
 	"github.com/rayfiyo/llms/dialogue/cmd/files"
+	"github.com/rayfiyo/llms/dialogue/cmd/filter"
 	"github.com/rayfiyo/llms/dialogue/cmd/flags"
 	"github.com/rayfiyo/llms/dialogue/cmd/generate"
 	"github.com/rayfiyo/llms/dialogue/models"
@@ -81,6 +82,7 @@ func main() {
 			}
 			content, _, err = client.Chat(request)
 		case "generate":
+			log.Println()
 			request := &models.GenerateRequest{
 				Model:   *flags.Model,
 				Prompt:  prompt,
@@ -105,7 +107,8 @@ func main() {
 			log.Fatalf("Error appending to file 2@%d: %v", i, err)
 		}
 
-		// 出力を入力に繋げる
+		// 次のサイクルに繋げる後処理
 		prompt = content
+		context = filter.Context(context)
 	}
 }
