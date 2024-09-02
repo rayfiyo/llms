@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/rayfiyo/llms/dialogue/api"
+	"github.com/rayfiyo/llms/dialogue/cmd/api"
 	"github.com/rayfiyo/llms/dialogue/cmd/files"
 	"github.com/rayfiyo/llms/dialogue/cmd/flags"
 	"github.com/rayfiyo/llms/dialogue/cmd/generate"
