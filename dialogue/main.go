@@ -66,7 +66,9 @@ func main() {
 			prompt = language + "\n" + *head + "\n" +
 				*init + "\n" + *tail
 			i = 0
+			log.Println(*init)
 			*init = ""
+			log.Println(*init)
 		}
 
 		switch *mode {
