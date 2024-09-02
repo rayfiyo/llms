@@ -46,7 +46,8 @@ func (c *Client) sendRequest(endpoint string, req interface{}, mode string) (str
 
 	if resp.StatusCode != http.StatusOK {
 		return "", fmt.Errorf("unexpected status code: %d\n%s",
-			resp.StatusCode, resp.Body)
+			resp.StatusCode, string(bufio.NewScanner(resp.Body).Bytes()),
+		)
 	}
 
 	var content strings.Builder
