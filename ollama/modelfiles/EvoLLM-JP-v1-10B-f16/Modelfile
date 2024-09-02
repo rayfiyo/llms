@@ -1,9 +1,9 @@
-FROM ./EvoLLM-JP-v1-10B-f16.gguf
+FROM ../../EvoLLM-JP-v1-10B-f16.gguf
 
-PARAMETER temperature 1
-PARAMETER stop </s>
+PARAMETER temperature 0.8
 PARAMETER top_p 0.95
 PARAMETER repeat_penalty 1.05
+PARAMETER stop </s>
 
 TEMPLATE """### 指示: {{ .System }}
 ### 入力: {{ .Prompt }}

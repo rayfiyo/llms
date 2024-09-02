@@ -1,15 +1,14 @@
-FROM ./Llama-3-Swallow-70B-v0.1-f16.gguf
+FROM ../../Llama-3-Swallow-70B-v0.1-f16.gguf
 
-PARAMETER temperature 1
+PARAMETER temperature 0.8
 PARAMETER num_ctx 8192
 PARAMETER num_keep 24
-PARAMETER stop <|start_header_id|>
-PARAMETER stop <|end_header_id|>
+PARAMETER top_p 0.95
+PARAMETER repeat_penalty 1.05
 PARAMETER stop <|eot_id|>
 
-TEMPLATE """{{ if .System }}<|start_header_id|>system<|end_header_id|>
-{{ .System }}<|eot_id|>{{ end }}{{ if .Prompt }}<|start_header_id|>user<|end_header_id|>
-{{ .Prompt }}<|eot_id|>{{ end }}<|start_header_id|>assistant<|end_header_id|>
-{{ .Response }}<|eot_id|>"""
+TEMPLATE """### 指示: {{ .System }}
+### 入力: {{ .Prompt }}
+### 応答:"""
 
 SYSTEM """あなたは誠実で優秀な日本人のアシスタントです。特に指示が無い場合は、常に日本語で回答してください。"""
