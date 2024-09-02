@@ -77,6 +77,9 @@ func main() {
 			log.Println(*flags.Init)
 		}
 
+		fmt.Print("\n- - - - - - - - - - - -\n")
+		log.Printf("%3d:\n\n", i)
+
 		switch *flags.Mode {
 		case "chat":
 			request := &models.ChatRequest{
@@ -102,16 +105,15 @@ func main() {
 			log.Fatalf("Error in switch@%d: %v", i, err)
 		}
 
-		// 出力系
+		// ファイルに保存
 		if err := files.Append(fileName, "## "+fmt.Sprint(i)); err != nil {
 			log.Fatalf("Error appending to file 1@%d: %v", i, err)
 		}
 		if err := files.Append(fileName, content); err != nil {
 			log.Fatalf("Error appending to file 2@%d: %v", i, err)
 		}
-		fmt.Println("- - - - - - - - - - - -")
-		fmt.Printf("%3d:\n%s\n", i, content)
 
+		// 出力を入力に繋げる
 		prompt = content
 	}
 }

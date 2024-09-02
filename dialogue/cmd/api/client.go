@@ -54,24 +54,33 @@ func (c *Client) sendRequest(endpoint string, req interface{}, mode string) (str
 	scanner := bufio.NewScanner(resp.Body)
 	for scanner.Scan() {
 		switch mode {
+
 		case "chat":
 			var response models.ChatResponse
 			if err := json.Unmarshal(
 				scanner.Bytes(), &response,
 			); err != nil {
-				return "", fmt.Errorf("Error unmarshaling chat response: %v", err)
+				return "", fmt.Errorf(
+					"Error unmarshaling chat response: %v", err)
 			}
+
+			fmt.Print(response.Message.Content) // 逐次標準出力
 			content.WriteString(response.Message.Content)
+
 		case "generate":
 			var response models.GenerateResponse
 			if err := json.Unmarshal(
 				scanner.Bytes(), &response,
 			); err != nil {
-				return "", fmt.Errorf("Error unmarshaling chat response: %v", err)
+				return "", fmt.Errorf(
+					"Error unmarshaling chat response: %v", err)
 			}
+
+			fmt.Print(response.Response) // 逐次標準出力
 			content.WriteString(response.Response)
 		}
 	}
+	fmt.Println("") // 文末調整用
 
 	if err := scanner.Err(); err != nil {
 		return "", fmt.Errorf("error reading response: %w", err)
