@@ -23,34 +23,35 @@ func NewClient(baseURL string) *Client {
 	}
 }
 
-func (c *Client) Chat(req *models.ChatRequest) (string, error) {
+func (c *Client) Chat(req *models.ChatRequest) (string, []int, error) {
 	return c.sendRequest("/api/chat", req, "chat")
 }
 
-func (c *Client) Generate(req *models.GenerateRequest) (string, error) {
+func (c *Client) Generate(req *models.GenerateRequest) (string, []int, error) {
 	return c.sendRequest("/api/generate", req, "generate")
 }
 
-func (c *Client) sendRequest(endpoint string, req interface{}, mode string) (string, error) {
+func (c *Client) sendRequest(endpoint string, req interface{}, mode string) (string, []int, error) {
 	data, err := json.Marshal(req)
 	if err != nil {
-		return "", fmt.Errorf("error marshaling request: %w", err)
+		return "", nil, fmt.Errorf("error marshaling request: %w", err)
 	}
 
 	resp, err := c.HTTPClient.Post(c.BaseURL+endpoint,
 		"application/json", bytes.NewBuffer(data))
 	if err != nil {
-		return "", fmt.Errorf("error making request: %w", err)
+		return "", nil, fmt.Errorf("error making request: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("unexpected status code: %d\n%s",
+		return "", nil, fmt.Errorf("unexpected status code: %d\n%s",
 			resp.StatusCode, string(bufio.NewScanner(resp.Body).Bytes()),
 		)
 	}
 
 	var content strings.Builder
+	var context []int
 	scanner := bufio.NewScanner(resp.Body)
 	for scanner.Scan() {
 		switch mode {
@@ -60,11 +61,14 @@ func (c *Client) sendRequest(endpoint string, req interface{}, mode string) (str
 			if err := json.Unmarshal(
 				scanner.Bytes(), &response,
 			); err != nil {
-				return "", fmt.Errorf(
+				return "", nil, fmt.Errorf(
 					"Error unmarshaling chat response: %v", err)
 			}
 
-			fmt.Print(response.Message.Content) // 逐次標準出力
+			// 逐次標準出力
+			fmt.Print(response.Message.Content)
+
+			// 変数への書き込み
 			content.WriteString(response.Message.Content)
 
 		case "generate":
@@ -72,19 +76,23 @@ func (c *Client) sendRequest(endpoint string, req interface{}, mode string) (str
 			if err := json.Unmarshal(
 				scanner.Bytes(), &response,
 			); err != nil {
-				return "", fmt.Errorf(
+				return "", nil, fmt.Errorf(
 					"Error unmarshaling chat response: %v", err)
 			}
 
-			fmt.Print(response.Response) // 逐次標準出力
+			// 逐次標準出力
+			fmt.Print(response.Response)
+
+			// 変数への書き込み
 			content.WriteString(response.Response)
+			context = response.Context
 		}
 	}
 	fmt.Println("") // 文末調整用
 
 	if err := scanner.Err(); err != nil {
-		return "", fmt.Errorf("error reading response: %w", err)
+		return "", context, fmt.Errorf("error reading response: %w", err)
 	}
 
-	return content.String(), nil
+	return content.String(), context, nil
 }
