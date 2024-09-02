@@ -22,26 +22,8 @@ func main() {
 
 	fileName := generate.FileName()
 
-	if err := files.Append(fileName, "---"+
-		"\nn: "+fmt.Sprint(*flags.CyclesLimit)+
-		"\n"+
-		"\nModel: "+*flags.Model+
-		"\nModel1: "+*flags.Model1+
-		"\nModel2: "+*flags.Model2+
-		"\n"+
-		"\nHead: "+*flags.Head+
-		"\nHead1: "+*flags.Head1+
-		"\nHead2: "+*flags.Head2+
-		"\n"+
-		"\nprompt: "+prompt+
-		"\nInit: "+*flags.Init+
-		"\n"+
-		"\nTail: "+*flags.Tail+
-		"\nTail1: "+*flags.Tail1+
-		"\nTail2: "+*flags.Tail2+
-		"\n---\n",
-	); err != nil {
-		log.Fatalf("Error appending options to file: %v", err)
+	if err := files.Header(fileName, prompt); err != nil {
+		log.Fatal("Error writing options in file header: %w", err)
 	}
 
 	client := api.NewClient("http://172.27.167.204:11434")
