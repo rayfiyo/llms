@@ -39,6 +39,7 @@ func main() {
 	client := api.NewClient("http://172.27.167.204:11434")
 
 	var content string
+	var context []int
 	var err error
 
 	for i := 1; i < *flags.CyclesLimit+1; i++ {
@@ -88,13 +89,13 @@ func main() {
 					{Role: "user", Content: prompt},
 				},
 			}
-			content, err = client.Chat(request)
+			content, _, err = client.Chat(request)
 		case "generate":
 			request := &models.GenerateRequest{
 				Model:  *flags.Model,
 				Prompt: prompt,
 			}
-			content, err = client.Generate(request)
+			content, context, err = client.Generate(request)
 		default:
 			log.Fatalf(
 				"Invalid flags.Mode: %s. Use 'chat' or 'generate'", *flags.Mode,
@@ -104,6 +105,8 @@ func main() {
 		if err != nil {
 			log.Fatalf("Error in switch@%d: %v", i, err)
 		}
+
+		log.Println(context)
 
 		// ファイルに保存
 		if err := files.Append(fileName, "## "+fmt.Sprint(i)); err != nil {
