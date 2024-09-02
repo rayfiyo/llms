@@ -1,10 +1,3 @@
-# Warning
-
-There is a line in this Dockerfile that refers to the directory directly under ~/.
-This is completely for my personal environment.
-この Dockerfile には ~/ 直下のディレクトリを参照している行がある．
-完全に私個人の環境向けである．
-
 # note
 
 ```bash
