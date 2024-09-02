@@ -6,75 +6,81 @@ import (
 	"log"
 
 	"github.com/rayfiyo/llms/dialogue/api"
-	"github.com/rayfiyo/llms/dialogue/cmd"
 	"github.com/rayfiyo/llms/dialogue/cmd/files"
+	"github.com/rayfiyo/llms/dialogue/cmd/flags"
+	"github.com/rayfiyo/llms/dialogue/cmd/generate"
 	"github.com/rayfiyo/llms/dialogue/models"
 )
 
-const language = "日本語のみで出力すること。"
+const language = ""
+
+// const language = "日本語のみで出力すること。"
 
 func main() {
-	mode := flag.String(
-		"mode", "generate", "Mode to use: 'chat' or 'generate'.")
-	model := flag.String(
-		"model", "Llama-3-Swallow-70B-Instruct-v0.1-Q8_0",
-		"Set model name.")
-	model1 := flag.String("model1", "", "Overwrite model name for odd cycles.")
-	model2 := flag.String("model2", "", "Overwrite model name for even cycles.")
-	cyclesLimit := flag.Int("limit", 6, "Limit number of sends cycles.")
-	head := flag.String("head", "", "Head of prompt. Fixed statement.")
-	head1 := flag.String("head1", "", "Head of odd cycle prompt. Fixed statement.")
-	head2 := flag.String("head2", "", "Head of even cycle prompt. Fixed statement.")
-	tail := flag.String("tail", "", "Head of prompt. Fixed statement.")
-	tail1 := flag.String("tail1", "", "Head of odd cycle prompt. Fixed statement.")
-	tail2 := flag.String("tail2", "", "Head of even cycle prompt. Fixed statement.")
-	init := flag.String("init", "", "Set prompt as initial question (0th).")
-	flag.Parse()
+	flags.Parse()
 	prompt := flag.Arg(0)
 
-	var content string
-	var err error
+	fileName := generate.FileName()
 
-	fileName := cmd.GenerateFileName()
-
-	if err := files.Append(fileName, "---\nhead: "+*head+"\nhead1: "+*head1+"\nhead2: "+*head2+
-		"\nprompt: "+prompt+"\ninit: "+*init+
-		"\ntail: "+*tail+"\ntail1: "+*tail1+"\ntail2: "+*tail2+"\n---\n"); err != nil {
+	if err := files.Append(fileName, "---"+
+		"\nflags.Head: "+*flags.Head+
+		"\nflags.Head1: "+*flags.Head1+
+		"\nflags.Head2: "+*flags.Head2+
+		"\nprompt: "+prompt+
+		"\nflags.Init: "+*flags.Init+
+		"\nflags.Tail: "+*flags.Tail+
+		"\nflags.Tail1: "+*flags.Tail1+
+		"\nflags.Tail2: "+*flags.Tail2+
+		"\n---\n",
+	); err != nil {
 		log.Fatalf("Error appending options to file: %v", err)
 	}
 
 	client := api.NewClient("http://172.27.167.204:11434")
 
-	for i := 1; i < *cyclesLimit+1; i++ {
+	var content string
+	var err error
+
+	for i := 1; i < *flags.CyclesLimit+1; i++ {
 		// 整形
 		if i%2 != 0 {
 			// 1 odd
-			prompt = language + "\n" + *head + "\n" + *head1 + "\n" +
-				prompt + "\n" + *tail + "\n" + *tail1
-			if *model1 != "" {
-				model = model1
+			prompt = language + "\n" +
+				*flags.Head + "\n" +
+				*flags.Head1 + "\n" +
+				prompt + "\n" +
+				*flags.Tail + "\n" +
+				*flags.Tail1 + "\n"
+			if *flags.Model1 != "" {
+				flags.Model = flags.Model1
 			}
 		} else {
 			// 2 even
-			prompt = language + "\n" + *head + "\n" + *head2 + "\n" +
-				prompt + "\n" + *tail + "\n" + *tail2
-			if *model2 != "" {
-				model = model2
+			prompt = language + "\n" +
+				*flags.Head + "\n" +
+				*flags.Head2 + "\n" +
+				prompt + "\n" +
+				*flags.Tail + "\n" +
+				*flags.Tail2 + "\n"
+			if *flags.Model2 != "" {
+				flags.Model = flags.Model2
 			}
 		}
-		if *init != "" {
-			prompt = language + "\n" + *head + "\n" +
-				*init + "\n" + *tail
+		if *flags.Init != "" {
+			prompt = language + "\n" +
+				*flags.Head + "\n" +
+				*flags.Init + "\n" +
+				*flags.Tail + "\n"
 			i = 0
-			log.Println(*init)
-			*init = ""
-			log.Println(*init)
+			log.Println(*flags.Init)
+			*flags.Init = ""
+			log.Println(*flags.Init)
 		}
 
-		switch *mode {
+		switch *flags.Mode {
 		case "chat":
 			request := &models.ChatRequest{
-				Model: *model,
+				Model: *flags.Model,
 				Messages: []models.Message{
 					{Role: "user", Content: prompt},
 				},
@@ -82,18 +88,18 @@ func main() {
 			content, err = client.Chat(request)
 		case "generate":
 			request := &models.GenerateRequest{
-				Model:  *model,
+				Model:  *flags.Model,
 				Prompt: prompt,
 			}
 			content, err = client.Generate(request)
 		default:
 			log.Fatalf(
-				"Invalid mode: %s. Use 'chat' or 'generate'", *mode,
+				"Invalid flags.Mode: %s. Use 'chat' or 'generate'", *flags.Mode,
 			)
 		}
 
 		if err != nil {
-			log.Fatalf("Error@%d: %v", i, err)
+			log.Fatalf("Error in switch@%d: %v", i, err)
 		}
 
 		// 出力系

@@ -45,8 +45,8 @@ func (c *Client) sendRequest(endpoint string, req interface{}, mode string) (str
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("unexpected status code: %d",
-			resp.StatusCode)
+		return "", fmt.Errorf("unexpected status code: %d\n%s",
+			resp.StatusCode, resp.Body)
 	}
 
 	var content strings.Builder
