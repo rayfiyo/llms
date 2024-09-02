@@ -7,7 +7,6 @@ import (
 
 	"github.com/rayfiyo/llms/dialogue/cmd/api"
 	"github.com/rayfiyo/llms/dialogue/cmd/files"
-	"github.com/rayfiyo/llms/dialogue/cmd/filter"
 	"github.com/rayfiyo/llms/dialogue/cmd/flags"
 	"github.com/rayfiyo/llms/dialogue/cmd/generate"
 	"github.com/rayfiyo/llms/dialogue/models"
@@ -30,7 +29,6 @@ func main() {
 	client := api.NewClient("http://172.27.167.204:11434")
 
 	var content string
-	var context []int
 	var err error
 
 	for i := 1; i < *flags.CyclesLimit+1; i++ {
@@ -80,15 +78,14 @@ func main() {
 					{Role: "user", Content: prompt},
 				},
 			}
-			content, _, err = client.Chat(request)
+			content, err = client.Chat(request)
 		case "generate":
-			log.Println()
 			request := &models.GenerateRequest{
-				Model:   *flags.Model,
-				Prompt:  prompt,
-				Context: context,
+				Model:  *flags.Model,
+				Prompt: prompt,
+				// Context: context,
 			}
-			content, context, err = client.Generate(request)
+			content, err = client.Generate(request)
 		default:
 			log.Fatalf(
 				"Invalid flags.Mode: %s. Use 'chat' or 'generate'", *flags.Mode,
@@ -109,6 +106,5 @@ func main() {
 
 		// 次のサイクルに繋げる後処理
 		prompt = content
-		context = filter.Context(context)
 	}
 }
