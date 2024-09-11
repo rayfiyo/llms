@@ -8,6 +8,8 @@ import (
 
 func Header(fileName string, prompt string) error {
 	return Append(fileName, "---"+
+		"\ntitle: "+
+		"\n"+
 		"\nn: "+fmt.Sprint(*flags.CyclesLimit)+
 		"\n"+
 		"\nModel: "+*flags.Model+
