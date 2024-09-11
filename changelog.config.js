@@ -66,12 +66,12 @@ module.exports = {
       value: "setting",
     },
     add: {
-      description: "➕️ファイルの追加（❗️あんまり使うな❗️）",
+      description: "➕️追加（❗️あんまり使うな❗️）",
       emoji: "➕️",
       value: "add",
     },
     del: {
-      description: "🗑️ファイルの削除（❗️あんまり使うな❗️）",
+      description: "🗑️削除（❗️あんまり使うな❗️）",
       emoji: "🗑️",
       value: "del",
     },
