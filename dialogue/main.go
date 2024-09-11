@@ -67,7 +67,11 @@ func main() {
 			*flags.Init = ""
 			log.Println(*flags.Init)
 		}
-		content += "## " + fmt.Sprintln(i)
+		if i%2 == 0 {
+			content += "## " + fmt.Sprintln(i, "偶数番目")
+		} else {
+			content += "## " + fmt.Sprintln(i, "奇数番目")
+		}
 
 		fmt.Print("\n- - - - - - - - - - - -\n")
 		log.Printf("%3d:\n\n", i)
