@@ -67,11 +67,6 @@ func main() {
 			*flags.Init = ""
 			log.Println(*flags.Init)
 		}
-		if i%2 == 0 {
-			content += "## " + fmt.Sprintln(i, "偶数番目")
-		} else {
-			content += "## " + fmt.Sprintln(i, "奇数番目")
-		}
 
 		fmt.Print("\n- - - - - - - - - - - -\n")
 		log.Printf("%3d:\n\n", i)
@@ -103,11 +98,14 @@ func main() {
 		}
 
 		// ファイルに保存
+		if err := files.Append(fileName, "## "+fmt.Sprint(i)); err != nil {
+			log.Fatalf("Error appending to file 1@%d: %v", i, err)
+		}
 		if err := files.Append(fileName, content); err != nil {
 			log.Fatalf("Error appending to file 2@%d: %v", i, err)
 		}
 
 		// 次のサイクルに繋げる後処理
-		prompt += content
+		prompt = content
 	}
 }
