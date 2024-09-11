@@ -31,8 +31,6 @@ func main() {
 
 	var content string
 	var formattedPrompt string
-	var history string
-	history = "会話履歴 := {\n"
 	var err error
 
 	for i := 1; i < *flags.CyclesLimit+1; i++ {
@@ -40,7 +38,6 @@ func main() {
 		if i%2 != 0 {
 			// 1 odd
 			formattedPrompt = language + "\n" +
-				history + "\n// ここが会話履歴の最後です\n}\n" +
 				*flags.Head + "\n" +
 				*flags.Head1 + "\n" +
 				prompt + "\n" +
@@ -52,7 +49,6 @@ func main() {
 		} else {
 			// 2 even
 			formattedPrompt = language + "\n" +
-				history + "\n// ここが会話履歴の最後です\n}\n" +
 				*flags.Head + "\n" +
 				*flags.Head2 + "\n" +
 				prompt + "\n" +
@@ -115,8 +111,6 @@ func main() {
 		}
 
 		// 次のサイクルに繋げる後処理
-		history += "## " + fmt.Sprint(i) + "\n" +
-			prompt + "\n" + content + "\n"
 		prompt = content
 	}
 }
