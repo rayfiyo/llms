@@ -30,13 +30,17 @@ func main() {
 	client := api.NewClient("http://172.27.167.204:11434")
 
 	var content string
+	var formattedPrompt string
+	var history string
+	history = "会話履歴 := {\n"
 	var err error
 
 	for i := 1; i < *flags.CyclesLimit+1; i++ {
 		// 整形
 		if i%2 != 0 {
 			// 1 odd
-			prompt = language + "\n" +
+			formattedPrompt = language + "\n" +
+				history + "\n// ここが会話履歴の最後です\n}\n" +
 				*flags.Head + "\n" +
 				*flags.Head1 + "\n" +
 				prompt + "\n" +
@@ -47,7 +51,7 @@ func main() {
 			}
 		} else {
 			// 2 even
-			prompt = language + "\n" +
+			formattedPrompt = language + "\n" +
 				*flags.Head + "\n" +
 				*flags.Head2 + "\n" +
 				prompt + "\n" +
@@ -58,7 +62,7 @@ func main() {
 			}
 		}
 		if *flags.Init != "" {
-			prompt = language + "\n" +
+			formattedPrompt = language + "\n" +
 				*flags.Head + "\n" +
 				*flags.Init + "\n" +
 				*flags.Tail + "\n"
@@ -76,14 +80,14 @@ func main() {
 			request := &models.ChatRequest{
 				Model: *flags.Model,
 				Messages: []models.Message{
-					{Role: "user", Content: prompt},
+					{Role: "user", Content: formattedPrompt},
 				},
 			}
 			content, err = client.Chat(request)
 		case "generate":
 			request := &models.GenerateRequest{
 				Model:  *flags.Model,
-				Prompt: prompt,
+				Prompt: formattedPrompt,
 				// Context: context,
 			}
 			content, err = client.Generate(request)
@@ -98,14 +102,22 @@ func main() {
 		}
 
 		// ファイルに保存
-		if err := files.Append(fileName, "## "+fmt.Sprint(i)); err != nil {
+		if err := files.Append(fileName,
+			"## "+fmt.Sprint(i)+"\n",
+		); err != nil {
 			log.Fatalf("Error appending to file 1@%d: %v", i, err)
 		}
-		if err := files.Append(fileName, content); err != nil {
+		if err := files.Append(fileName,
+			content+"\n",
+		); err != nil {
 			log.Fatalf("Error appending to file 2@%d: %v", i, err)
 		}
 
 		// 次のサイクルに繋げる後処理
+		history += "## " +
+			fmt.Sprint(i) + "\n" +
+			prompt + "\n" +
+			content + "\n"
 		prompt = content
 	}
 }
