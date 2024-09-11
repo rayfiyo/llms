@@ -22,6 +22,7 @@ func main() {
 
 	fileName := generate.FileName()
 
+	// ログの Markdown に ヘッダー情報として書き込む
 	if err := files.Header(fileName, prompt); err != nil {
 		log.Fatal("Error writing options in file header: %w", err)
 	}
@@ -66,6 +67,7 @@ func main() {
 			*flags.Init = ""
 			log.Println(*flags.Init)
 		}
+		content += "## " + fmt.Sprintln(i)
 
 		fmt.Print("\n- - - - - - - - - - - -\n")
 		log.Printf("%3d:\n\n", i)
@@ -97,14 +99,16 @@ func main() {
 		}
 
 		// ファイルに保存
-		if err := files.Append(fileName, "## "+fmt.Sprint(i)); err != nil {
-			log.Fatalf("Error appending to file 1@%d: %v", i, err)
-		}
+		// if err := files.Append(
+		//	fileName, "## "+fmt.Sprint(i)
+		// ); err != nil {
+		// log.Fatalf("Error appending to file 1@%d: %v", i, err)
+		// }
 		if err := files.Append(fileName, content); err != nil {
 			log.Fatalf("Error appending to file 2@%d: %v", i, err)
 		}
 
 		// 次のサイクルに繋げる後処理
-		prompt = content
+		prompt += content
 	}
 }
