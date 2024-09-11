@@ -52,6 +52,7 @@ func main() {
 		} else {
 			// 2 even
 			formattedPrompt = language + "\n" +
+				history + "\n// ここが会話履歴の最後です\n}\n" +
 				*flags.Head + "\n" +
 				*flags.Head2 + "\n" +
 				prompt + "\n" +
@@ -74,6 +75,7 @@ func main() {
 
 		fmt.Print("\n- - - - - - - - - - - -\n")
 		log.Printf("%3d:\n\n", i)
+		log.Print(formattedPrompt + "\n\n")
 
 		switch *flags.Mode {
 		case "chat":
@@ -114,10 +116,8 @@ func main() {
 		}
 
 		// 次のサイクルに繋げる後処理
-		history += "## " +
-			fmt.Sprint(i) + "\n" +
-			prompt + "\n" +
-			content + "\n"
+		history += "## " + fmt.Sprint(i) + "\n" +
+			prompt + "\n" + content + "\n"
 		prompt = content
 	}
 }
