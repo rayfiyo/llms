@@ -6,7 +6,7 @@ import (
 
 var (
 	Mode = flag.String(
-		"mode", "generate", "Mode to use: 'chat' or 'generate'.")
+		"mode", "chat", "Mode to use: 'chat' or 'generate'.")
 	Model = flag.String(
 		"model", "Llama-3-Swallow-70B-Instruct-v0.1-Q8_0", "Set model name.")
 	Model1 = flag.String(
