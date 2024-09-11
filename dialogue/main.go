@@ -75,7 +75,6 @@ func main() {
 
 		fmt.Print("\n- - - - - - - - - - - -\n")
 		log.Printf("%3d:\n\n", i)
-		log.Print(formattedPrompt + "\n\n")
 
 		switch *flags.Mode {
 		case "chat":
