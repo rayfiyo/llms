@@ -5,6 +5,19 @@ IMAGE = ollama-image
 MODEL = Llama-3-Swallow-70B-Instruct-v0.1-Q8_0
 # MODEL = llama3:70b
 
+init:
+	@make --no-print-directory build
+	@make --no-print-directory run
+
+start:
+	@make --no-print-directory build
+	@make --no-print-directory run
+	@make --no-print-directory exec
+
+clean-all:
+	@make --no-print-directory clean
+	@make --no-print-directory rmi
+
 #
 
 build:
@@ -17,17 +30,6 @@ exec:
 	docker exec -it $(CONTAINER) bash -c "ollama create $(MODEL) -f /modelfiles/$(MODEL)/Modelfile && ollama run $(MODEL)"
 	# docker exec -it $(CONTAINER) ollama run $(MODEL)
 
-init:
-	@make --no-print-directory build
-	@make --no-print-directory run
-	@make --no-print-directory exec
-
-start:
-	@make --no-print-directory run
-	@make --no-print-directory exec
-
-#
-
 stop:
 	docker stop $(CONTAINER)
 
@@ -37,7 +39,3 @@ clean:
 
 rmi:
 	docker rmi $(IMAGE)
-
-clean-all:
-	@make --no-print-directory clean
-	@make --no-print-directory rmi
