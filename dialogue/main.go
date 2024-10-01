@@ -12,10 +12,6 @@ import (
 	"github.com/rayfiyo/llms/dialogue/models"
 )
 
-const language = ""
-
-// const language = "日本語のみで出力すること。"
-
 func main() {
 	flags.Parse()
 	prompt := flag.Arg(0)
@@ -37,7 +33,7 @@ func main() {
 		// 整形
 		if i%2 != 0 {
 			// 1 odd
-			formattedPrompt = language + "\n" +
+			formattedPrompt = "" +
 				*flags.Head + "\n" +
 				*flags.Head1 + "\n" +
 				prompt + "\n" +
@@ -48,7 +44,7 @@ func main() {
 			}
 		} else {
 			// 2 even
-			formattedPrompt = language + "\n" +
+			formattedPrompt = "" +
 				*flags.Head + "\n" +
 				*flags.Head2 + "\n" +
 				prompt + "\n" +
@@ -59,7 +55,7 @@ func main() {
 			}
 		}
 		if *flags.Init != "" {
-			formattedPrompt = language + "\n" +
+			formattedPrompt = "" +
 				*flags.Head + "\n" +
 				*flags.Init + "\n" +
 				*flags.Tail + "\n"
