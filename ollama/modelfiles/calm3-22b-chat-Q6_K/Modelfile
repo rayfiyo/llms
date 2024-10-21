@@ -8,7 +8,7 @@ PARAMETER stop "<|start_header_id|>"
 PARAMETER stop "<|end_header_id|>"
 PARAMETER stop "<|eot_id|>"
 
-TEMPLATE "{{- if or .System .Tools }}<|start_header_id|>system<|end_header_id|>
+TEMPLATE """{{- if or .System .Tools }}<|start_header_id|>system<|end_header_id|>
 {{- if .System }}
 
 {{ .System }}
@@ -55,6 +55,6 @@ Question: {{ .Content }}<|eot_id|>
 
 {{ end }}
 {{- end }}
-{{- end }}"
+{{- end }}"""
 
-SYSTEM あなたは誠実で優秀な日本人のアシスタントです。特に指示が無い場合は、常に日本語で回答してください。
+SYSTEM """日本語で回答してください。"""
