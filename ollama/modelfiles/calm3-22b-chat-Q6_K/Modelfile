@@ -1,0 +1,17 @@
+FROM ../../calm3-22b-chat-Q6_K.gguf
+
+PARAMETER num_keep 24
+PARAMETER temperature 1.2
+PARAMETER top_p 0.8
+PARAMETER repeat_penalty 2.5
+PARAMETER no_repeat_ngram_size 4
+PARAMETER start <|im_start|>
+PARAMETER stop <|im_end|>
+
+TEMPLATE "<|im_start|>system
+ここにSystem Promptを書きます。<|im_end|>
+<|im_start|>user
+ここにMessageを書きます。<|im_end|>
+<|im_start|>assistant"
+
+SYSTEM あなたは誠実で優秀な日本人のアシスタントです。日本語で回答してください。
