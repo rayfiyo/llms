@@ -4,7 +4,6 @@ PARAMETER num_keep 24
 PARAMETER temperature 1.2
 PARAMETER top_p 0.8
 PARAMETER repeat_penalty 2.5
-PARAMETER no_repeat_ngram_size 4
 PARAMETER start <|im_start|>
 PARAMETER stop <|im_end|>
 
