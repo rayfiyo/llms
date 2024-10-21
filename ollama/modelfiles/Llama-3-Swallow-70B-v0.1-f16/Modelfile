@@ -2,10 +2,10 @@ FROM ./Llama-3-Swallow-70B-v0.1-f16.gguf
 
 PARAMETER temperature 1
 PARAMETER num_keep 24
-PARAMETER stop <|start_header_id|>
-PARAMETER stop <|end_header_id|>
-PARAMETER stop <|end_of_text|>
-PARAMETER stop <|eot_id|>
+PARAMETER stop "<|start_header_id|>"
+PARAMETER stop "<|end_header_id|>"
+PARAMETER stop "<|end_of_text|>"
+PARAMETER stop "<|eot_id|>"
 PARAMETER stop user
 
 TEMPLATE "{{ if .System }}<|start_header_id|>system<|end_header_id|>
