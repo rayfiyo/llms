@@ -1,12 +1,12 @@
 FROM ../../calm3-22b-chat-Q6_K.gguf
 
-PARAMETER num_keep 24
 PARAMETER temperature 1.2
 PARAMETER top_p 0.8
 PARAMETER repeat_penalty 2.5
 PARAMETER stop "<|start_header_id|>"
 PARAMETER stop "<|end_header_id|>"
 PARAMETER stop "<|eot_id|>"
+PARAMETER stop "<|eot_id"
 
 TEMPLATE """{{- if or .System .Tools }}<|start_header_id|>system<|end_header_id|>
 {{- if .System }}
